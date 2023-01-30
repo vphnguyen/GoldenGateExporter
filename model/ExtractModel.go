@@ -6,6 +6,8 @@ import "encoding/xml"
 
 // Định nghĩa struct ExtractModel
 type ExtractModel struct {
+	Direction                 string
+	BDname                    string
 	XMLName                   xml.Name `xml:"mpoints"`
 	Text                      string   `xml:",chardata"`
 	Xsi                       string   `xml:"xsi,attr"`
@@ -100,13 +102,15 @@ type ExtractModel struct {
 
 // Là một phương thức của Extract Model dùng để kiểm tra thử xem Extract này có được dùng làm InitLoad (Sourceistable) không.
 func (m *ExtractModel) IsInitLoad() bool {
-	if len(m.Process.TrailOutput) == 0 {
-		return true
+	for _, i := range m.Process.TrailOutput {
+		if len(i.TrailPath) == 0 {
+			return true
+		}
 	}
 	return false
 }
 func (m *ExtractModel) IsANewOne() bool {
-	if m.Name != "" && m.Process.Name == "" {
+	if len(m.Name) != 0 && len(m.Process.Name) == 0 {
 		return true
 	}
 	return false

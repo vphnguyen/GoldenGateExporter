@@ -88,7 +88,7 @@ func NewGoldenGateCollector(c model.Config) *GoldenGateCollector {
 		metricStatus: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "status"),
 			"Status cua cac group trong GG _ type 2:Capture:EXTRACT 4:pump:EXTRACT 3:Delivery:REPLICAT 14:PMSRVR 1:MANAGER _status 3:running 6:stopped 8:append 1:Registered never executed",
-			[]string{"mgr_host", "group_name", "type"}, nil,
+			[]string{"mgr_host", "group_name", "type", "direction", "dbname"}, nil,
 		),
 		// ==
 		metricTrailSeq: prometheus.NewDesc(
@@ -211,17 +211,20 @@ func (collector *GoldenGateCollector) Collect(ch chan<- prometheus.Metric) {
 	mgroups, err := storage.GetGroups(config.RootURL)
 	log.Debugf("Start getting info from: " + config.RootURL + "/groups")
 	if err != nil {
-		log.Errorf("Service - khong the parser Object - groups: %s", err)
+		log.Errorf("- Service - khong the parser Object - groups: %s", err)
 	}
 	for _, aGroup := range mgroups.GroupRefs {
+		dir, dbname := getDirAndDBName(aGroup.Description.Text)
 		log.Debugf("GROUP: %s :%s", aGroup.Name, typeToString(aGroup.Type))
 		if aGroup.IsExtract() {
 			anExtract, er := storage.GetExtract(config.RootURL, aGroup.URL)
 			if er != nil {
-				log.Warnf("Service - %s", er)
-				log.Infof("Skipped ")
+				log.Warnf("- Service - %s", er)
+				log.Infof("- Skipped ")
 			}
 			if anExtract != nil && er == nil {
+				anExtract.Direction = dir
+				anExtract.BDname = dbname
 				listOfExtract = append(listOfExtract, *anExtract)
 				continue
 			}
@@ -229,23 +232,25 @@ func (collector *GoldenGateCollector) Collect(ch chan<- prometheus.Metric) {
 		if aGroup.IsPump() {
 			aPump, er := storage.GetPump(config.RootURL, aGroup.URL)
 			if er != nil {
-				log.Warnf("Service - %s", er)
-				log.Infof("Skipped ")
+				log.Warnf("- Service - %s", er)
+				log.Infof("- Skipped ")
 				continue
 			}
+			aPump.Direction = dir
+			aPump.BDname = dbname
 			listOfPump = append(listOfPump, *aPump)
 			continue
 		}
 		if aGroup.IsManager() {
 			if er := storage.GetManager(config.RootURL, aGroup.URL, &manager); er != nil {
-				log.Infof("Service - %s", er)
+				log.Infof("- Service - %s", er)
 				continue
 			}
 			continue
 		}
 		if aGroup.IsPerformanceServer() {
 			if er := storage.GetPerformanceServer(config.RootURL, aGroup.URL, &performanceServer); er != nil {
-				log.Infof("Service - %s", er)
+				log.Infof("- Service - %s", er)
 				continue
 			}
 			continue
@@ -253,10 +258,12 @@ func (collector *GoldenGateCollector) Collect(ch chan<- prometheus.Metric) {
 		if aGroup.IsReplicat() {
 			aReplicat, er := storage.GetReplicat(config.RootURL, aGroup.URL)
 			if er != nil {
-				log.Infof("Service - %s", er)
-				log.Infof("Skipped ")
+				log.Infof("- Service - %s", er)
+				log.Infof("- Skipped ")
 				continue
 			}
+			aReplicat.Direction = dir
+			aReplicat.BDname = dbname
 			listOfReplicat = append(listOfReplicat, *aReplicat)
 			continue
 		}
@@ -280,7 +287,7 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 	ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 		prometheus.GaugeValue,
 		toFloat64("", manager.Process.Status),
-		[]string{config.MgrHost, manager.Process.Name, typeToString(manager.Process.Type)}...)
+		[]string{config.MgrHost, manager.Process.Name, typeToString(manager.Process.Type), "", ""}...)
 	// ===== Extract    =======
 
 	log.Debugf("Extract")
@@ -289,7 +296,7 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 		ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 			prometheus.GaugeValue,
 			toFloat64("metricStatus", extract.Process.Status),
-			[]string{config.MgrHost, extract.Process.Name, typeToString(extract.Process.Type)}...)
+			[]string{config.MgrHost, extract.Process.Name, typeToString(extract.Process.Type), extract.Direction, extract.BDname}...)
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationLag,
 			prometheus.GaugeValue,
 			toFloat64("metricLastOperationLag", extract.Process.PositionEr.LastOperationLag),
@@ -354,7 +361,7 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 		ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 			prometheus.GaugeValue,
 			toFloat64("metricStatus", pump.Process.Status),
-			[]string{config.MgrHost, pump.Process.Name, typeToString(pump.Process.Type)}...)
+			[]string{config.MgrHost, pump.Process.Name, typeToString(pump.Process.Type), pump.Direction, pump.BDname}...)
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationLag,
 			prometheus.GaugeValue,
 			toFloat64("metricLastOperationLag", pump.Process.PositionEr.LastOperationLag),
@@ -454,7 +461,7 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 	ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 		prometheus.GaugeValue,
 		toFloat64("metricStatus", performanceServer.Process.Status),
-		[]string{config.MgrHost, performanceServer.Process.Name, typeToString(performanceServer.Process.Type)}...)
+		[]string{config.MgrHost, performanceServer.Process.Name, typeToString(performanceServer.Process.Type), "", ""}...)
 
 	// ===== REPLICAT   =======
 	log.Debugf("Replicat")
@@ -463,7 +470,12 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 		ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 			prometheus.GaugeValue,
 			toFloat64("", replicat.Process.Status),
-			[]string{config.MgrHost, replicat.Process.Name, typeToString(replicat.Process.Type)}...)
+			[]string{
+				config.MgrHost, replicat.Process.Name,
+				typeToString(replicat.Process.Type),
+				replicat.Direction,
+				replicat.BDname}...)
+
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationLag,
 			prometheus.GaugeValue,
 			toFloat64("", replicat.Process.PositionEr.LastOperationLag),
@@ -554,7 +566,19 @@ func toUnixTime(input string) float64 {
 	return float64(ut)
 }
 
-// ------ Chuyen tu string type trong object thanh cac string day du, de hieu
+// ------ Phan tich Desc de lay chieu di data va DB name
+func getDirAndDBName(inputString string) (string, string) {
+	i := strings.Index(inputString, "+")
+	if i > -1 {
+		dir := strings.Trim(inputString[:i], "\"")
+		dbname := strings.Trim(inputString[i+1:], "\"")
+		return dir, dbname
+	} else {
+		return "", ""
+	}
+}
+
+// ------ Chuyen tu string type trong object thanh cac string
 func typeToString(inputString string) string {
 	if inputString == model.TYPE_PMSRVR {
 		return "Performance_Metrics_Server"

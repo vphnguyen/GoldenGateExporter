@@ -6,6 +6,8 @@ import "encoding/xml"
 
 // Định nghĩa struct ReplicatModel
 type ReplicatModel struct {
+	Direction                 string
+	BDname                    string
 	XMLName                   xml.Name `xml:"mpoints"`
 	Text                      string   `xml:",chardata"`
 	Xsi                       string   `xml:"xsi,attr"`
@@ -101,7 +103,7 @@ func (m *ReplicatModel) IsInitLoad() bool {
 	return false
 }
 func (m *ReplicatModel) IsANewOne() bool {
-	if m.Name != "" && m.Process.Name == "" {
+	if len(m.Name) != 0 && len(m.Process.Name) == 0 {
 		return true
 	}
 	return false
