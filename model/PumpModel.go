@@ -6,15 +6,10 @@ import (
 	"encoding/xml"
 )
 
-func (m *PumpModel) IsANewOne() bool {
-	if m.Name != "" && m.Process.Name == "" {
-		return true
-	}
-	return false
-}
-
 // Định nghĩa struct PumpModel
 type PumpModel struct {
+	Direction                 string
+	BDname                    string
 	XMLName                   xml.Name `xml:"mpoints"`
 	Text                      string   `xml:",chardata"`
 	Xsi                       string   `xml:"xsi,attr"`
@@ -144,4 +139,11 @@ type PumpModel struct {
 			UncompressesBytesOut string `xml:"uncompresses_bytes_out"`
 		} `xml:"network-stats"`
 	} `xml:"process"`
+}
+
+func (m *PumpModel) IsANewOne() bool {
+	if len(m.Name) != 0 && len(m.Process.Name) == 0 {
+		return true
+	}
+	return false
 }

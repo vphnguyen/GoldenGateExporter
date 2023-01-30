@@ -31,14 +31,14 @@ func GetGroups(rootURL string) (*model.GroupsModel, error) {
 func GetPump(rootURL string, branch string) (*model.PumpModel, error) {
 	var aPump model.PumpModel
 	data, err := fetch(rootURL + branch + "/mpointsx")
+	if aPump.IsANewOne() {
+		return nil, errors.New("Storage - Pump - Fetched - " + aPump.Name + " Just created.")
+	}
 	if err != nil {
 		return nil, errors.New("Storage - Pump - Fetch failed - Check: " + rootURL + branch + "/mpointsx/")
 	}
 	if er := xml.Unmarshal(data, &aPump); er != nil {
 		return nil, errors.New("Storage - Pump - Fetched - Unmarshal error.")
-	}
-	if aPump.IsANewOne() {
-		return nil, errors.New("Storage - Pump - Fetched - " + aPump.Name + " Just created.")
 	}
 	return &aPump, nil
 }
@@ -47,6 +47,9 @@ func GetPump(rootURL string, branch string) (*model.PumpModel, error) {
 func GetExtract(rootURL string, branch string) (*model.ExtractModel, error) {
 	var anExtract model.ExtractModel
 	data, err := fetch(rootURL + branch + "/mpoints")
+	if anExtract.IsANewOne() {
+		return nil, errors.New("Storage - Extract - Fetched - " + anExtract.Name + " Just created.")
+	}
 	if err != nil {
 		return nil, errors.New("Storage - Extract - Fetch failed - Check: " + rootURL + branch + "/mpointsx/")
 	}
@@ -55,9 +58,6 @@ func GetExtract(rootURL string, branch string) (*model.ExtractModel, error) {
 	}
 	if anExtract.IsInitLoad() {
 		return nil, errors.New("Storage - Extract - " + anExtract.Name + " Could be an Initload.")
-	}
-	if anExtract.IsANewOne() {
-		return nil, errors.New("Storage - Extract - Fetched - " + anExtract.Name + " Just created.")
 	}
 	return &anExtract, nil
 }
@@ -95,11 +95,11 @@ func GetReplicat(rootURL string, branch string) (*model.ReplicatModel, error) {
 	if er := xml.Unmarshal(data, &aReplicat); er != nil {
 		return nil, errors.New("Storage - Replicat - Fetched - Unmarshal error.")
 	}
-	if aReplicat.IsInitLoad() {
-		return nil, errors.New("Storage - Replicat - " + aReplicat.Name + " Could be an Initload.")
-	}
 	if aReplicat.IsANewOne() {
 		return nil, errors.New("Storage - Replicat - Fetched - " + aReplicat.Name + " Just created.")
+	}
+	if aReplicat.IsInitLoad() {
+		return nil, errors.New("Storage - Replicat - " + aReplicat.Name + " Could be an Initload.")
 	}
 	return &aReplicat, nil
 }
