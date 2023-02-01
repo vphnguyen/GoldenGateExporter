@@ -88,112 +88,112 @@ func NewGoldenGateCollector(c model.Config) *GoldenGateCollector {
 		metricStatus: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "status"),
 			"Status cua cac group trong GG _ type 2:Capture:EXTRACT 4:pump:EXTRACT 3:Delivery:REPLICAT 14:PMSRVR 1:MANAGER _status 3:running 6:stopped 8:append 1:Registered never executed",
-			[]string{"mgr_host", "group_name", "type", "direction", "dbname"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		// ==
 		metricTrailSeq: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "trail_seq"),
 			"So lan ma file trail da thuc hien rotate",
-			[]string{"trail_name", "trail_path", "hostname", "group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "trail_name", "trail_path"}, nil,
 		),
 		metricTrailRba: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "trail_rba"),
 			"Kich thuoc hien tai cua file trail dang hoat dong",
-			[]string{"trail_name", "trail_path", "hostname", "group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "trail_name", "trail_path"}, nil,
 		),
 		// == WRITE
 		metricTrailIoWriteCount: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "io_write_count"),
 			"So lan ghi du lieu vao cac file trail _ ap dung cho EXTRACT PUMP",
-			[]string{"trail_name", "trail_path", "hostname", "group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "trail_name", "trail_path"}, nil,
 		),
 		metricTrailIoWriteByte: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "io_write_bytes"),
 			"So byte da duoc ghi vao cac file trail _ ap dung cho EXTRACT PUMP",
-			[]string{"trail_name", "trail_path", "hostname", "group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "trail_name", "trail_path"}, nil,
 		),
 		// == READ
 		metricTrailIoReadCount: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "io_read_count"),
 			"So lan doc du lieu tu cac file trail _ ap dung cho PUMP REP",
-			[]string{"trail_name", "trail_path", "hostname", "group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "trail_name", "trail_path"}, nil,
 		),
 		metricTrailIoReadByte: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "io_read_bytes"),
 			"So byte da doc tu cac file trail _ ap dung cho PUMP REP",
-			[]string{"trail_name", "trail_path", "hostname", "group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "trail_name", "trail_path"}, nil,
 		),
 		//==== EXTRACT
 		metricTrailMaxBytes: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "extract_trail_max_bytes"),
 			"Trail Output _ extract_trail_max_bytes _ Kich thuoc toi da cua file trail",
-			[]string{"trail_name", "trail_path", "hostname", "group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "trail_name", "trail_path"}, nil,
 		),
 		//==== PUMP
 		metricStatistics: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "statistics"),
 			"metricStatistics HELP",
-			[]string{"hostname", "group_name", "mapped"}, nil,
+			[]string{"direction", "dbname", "group_name", "type", "mapped"}, nil,
 		),
 		metricLastOperationLag: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "last_operation_lag"),
 			"last_operation_lag",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricLastOperationTs: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "last_operation_ts"),
 			"last_operation_ts",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricLastCheckpointTs: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "last_checkpoint_ts"),
 			"last_operation_ts metricLastCheckpointTs",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricInputCheckpoint: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "input_checkpoint"),
 			"input_checkpoint metricInputCheckpoint",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricInbound_bytes: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Inbound_bytes"),
 			"Inbound_bytes metricInbound_bytes",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricInbound_messages: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Inbound_messages"),
 			"Inbound_messages metricInbound_messages",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricOutbound_bytes: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Outbound_bytes"),
 			"Outbound_bytes metricOutbound_bytes",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricOutbound_messages: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Outbound_messages"),
 			"Outbound_messages metricOutbound_messages",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricSend_wait_time: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Send_wait_time"),
 			"Send_wait_time metricSend_wait_time",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricReceive_wait_time: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Receive_wait_time"),
 			"Receive_wait_time metricReceive_wait_time",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricSend_count: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Send_count"),
 			"Send_count metricSend_count",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 		metricReceive_count: prometheus.NewDesc(
 			prometheus.BuildFQName(collector, "", "Receive_count"),
 			"Receive_count metricReceive_count",
-			[]string{"group_name"}, nil,
+			[]string{"direction", "dbname", "group_name", "type"}, nil,
 		),
 	}
 }
@@ -284,62 +284,74 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 	// ===== MGR        =======
 	log.Debugf("Manager")
 	log.Debugf("  - %s", manager.Name)
+	managerInfo := []string{"", "", manager.Process.Name, typeToString(manager.Process.Type)}
 	ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 		prometheus.GaugeValue,
 		toFloat64("", manager.Process.Status),
-		[]string{config.MgrHost, manager.Process.Name, typeToString(manager.Process.Type), "", ""}...)
-	// ===== Extract    =======
+		managerInfo...)
 
+	// ===== Extract    =======
 	log.Debugf("Extract")
 	for _, extract := range *listOfExtract {
 		log.Debugf("  - %s", extract.Name)
+		// INFO
+		extractInfo := []string{
+			extract.Direction,
+			extract.BDname,
+			extract.Process.Name,
+			typeToString(extract.Process.Type)}
+
+		// METRIC VALUES
 		ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 			prometheus.GaugeValue,
 			toFloat64("metricStatus", extract.Process.Status),
-			[]string{config.MgrHost, extract.Process.Name, typeToString(extract.Process.Type), extract.Direction, extract.BDname}...)
+			extractInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationLag,
 			prometheus.GaugeValue,
 			toFloat64("metricLastOperationLag", extract.Process.PositionEr.LastOperationLag),
-			extract.Process.Name)
+			extractInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationTs,
 			prometheus.GaugeValue,
 			toUnixTime(extract.Process.PositionEr.LastOperationTs),
-			extract.Process.Name)
+			extractInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricLastCheckpointTs,
 			prometheus.GaugeValue,
 			toUnixTime(extract.Process.PositionEr.LastCheckpointTs),
-			extract.Process.Name)
+			extractInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricInputCheckpoint,
 			prometheus.GaugeValue,
 			getInputCheckPointValue(extract.Process.PositionEr.InputCheckpoint),
-			extract.Process.Name)
-
+			extractInfo...)
 		for _, trail := range extract.Process.TrailOutput {
 			//========== io_write_count     "trail_name","trail_path","hostname","group_name"
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailIoWriteCount,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailIoWriteCount", trail.IoWriteCount),
-				[]string{trail.TrailName, trail.TrailPath, trail.Hostname, extract.Process.Name}...)
+				append(extractInfo, trail.TrailName, trail.TrailPath)...)
+
 			//========== io_write_bytes
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailIoWriteByte,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailIoWriteByte", trail.IoWriteBytes),
-				[]string{trail.TrailName, trail.TrailPath, trail.Hostname, extract.Process.Name}...)
+				append(extractInfo, trail.TrailName, trail.TrailPath)...)
+
 			//========== metricTrailRba
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailRba,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailRba", trail.TrailRba),
-				[]string{trail.TrailName, trail.TrailPath, trail.Hostname, extract.Process.Name}...)
+				append(extractInfo, trail.TrailName, trail.TrailPath)...)
+
 			//========== metricTrailSeq
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailSeq,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailSeq", trail.TrailSeq),
-				[]string{trail.TrailName, trail.TrailPath, trail.Hostname, extract.Process.Name}...)
+				append(extractInfo, trail.TrailName, trail.TrailPath)...)
+
 			//========== extract_metricTrailMaxBytes
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailMaxBytes,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailMaxBytes", trail.TrailMaxBytes),
-				[]string{trail.TrailName, trail.TrailPath, trail.Hostname, extract.Process.Name}...)
+				append(extractInfo, trail.TrailName, trail.TrailPath)...)
 		}
 
 		log.Debugf("\t- StatisticsExtract")
@@ -349,7 +361,8 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 				ch <- prometheus.MustNewConstMetric(collector.metricStatistics,
 					prometheus.GaugeValue,
 					toFloat64("metricStatistics."+a.Type().Field(i).Name, fmt.Sprintf("%s", a.Field(i).Interface())),
-					[]string{config.MgrHost, extract.Process.Name, a.Type().Field(i).Name}...)
+					append(extractInfo, a.Type().Field(i).Name)...)
+
 			}
 		}
 	}
@@ -357,100 +370,113 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 	// ===== PUMP  =======
 	log.Debugf("Pump")
 	for _, pump := range *listOfPump {
+
+		pumpInfo := []string{
+			pump.Direction,
+			pump.BDname,
+			pump.Process.Name,
+			typeToString(pump.Process.Type)}
+
 		log.Debugf("  - %s", pump.Name)
 		ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 			prometheus.GaugeValue,
 			toFloat64("metricStatus", pump.Process.Status),
-			[]string{config.MgrHost, pump.Process.Name, typeToString(pump.Process.Type), pump.Direction, pump.BDname}...)
+			pumpInfo...)
+
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationLag,
 			prometheus.GaugeValue,
 			toFloat64("metricLastOperationLag", pump.Process.PositionEr.LastOperationLag),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationTs,
 			prometheus.GaugeValue,
 			toUnixTime(pump.Process.PositionEr.LastOperationTs),
-			pump.Process.Name)
+			pumpInfo...)
 
 		// TCP stat
 		ch <- prometheus.MustNewConstMetric(collector.metricInbound_bytes,
 			prometheus.GaugeValue,
 			toFloat64("metricInbound_bytes", pump.Process.NetworkStats.InboundBytes),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricInbound_messages,
 			prometheus.GaugeValue,
 			toFloat64("metricInbound_messages", pump.Process.NetworkStats.InboundMessages),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricOutbound_bytes,
 			prometheus.GaugeValue,
 			toFloat64("metricOutbound_bytes", pump.Process.NetworkStats.OutboundBytes),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricOutbound_messages,
 			prometheus.GaugeValue,
 			toFloat64("metricOutbound_messages", pump.Process.NetworkStats.OutboundMessages),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricSend_wait_time,
 			prometheus.GaugeValue,
 			toFloat64("metricSend_wait_time", pump.Process.NetworkStats.SendWaitTime),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricReceive_wait_time,
 			prometheus.GaugeValue,
 			toFloat64("metricReceive_wait_time", pump.Process.NetworkStats.ReceiveWaitTime),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricSend_count,
 			prometheus.GaugeValue,
 			toFloat64("metricSend_count", pump.Process.NetworkStats.SendCount),
-			pump.Process.Name)
+			pumpInfo...)
 		ch <- prometheus.MustNewConstMetric(collector.metricReceive_count,
 			prometheus.GaugeValue,
 			toFloat64("metricReceive_count", pump.Process.NetworkStats.ReceiveCount),
-			pump.Process.Name)
+			pumpInfo...)
 
 		// === Trail in
 		// -- REad
 		ch <- prometheus.MustNewConstMetric(collector.metricTrailIoReadCount,
 			prometheus.GaugeValue,
 			toFloat64("metricTrailIoReadCount", pump.Process.TrailInput.IoReadCount),
-			[]string{pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath, config.MgrHost, pump.Process.Name}...)
+			append(pumpInfo, pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath)...)
+
 		ch <- prometheus.MustNewConstMetric(collector.metricTrailIoReadByte,
 			prometheus.GaugeValue,
 			toFloat64("metricTrailIoReadByte", pump.Process.TrailInput.IoReadBytes),
-			[]string{pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath, config.MgrHost, pump.Process.Name}...)
+			append(pumpInfo, pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath)...)
+
 		// -- RBA - SEQ
 		ch <- prometheus.MustNewConstMetric(collector.metricTrailRba,
 			prometheus.GaugeValue,
 			toFloat64("metricTrailRba", pump.Process.TrailInput.TrailRba),
-			[]string{pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath, config.MgrHost, pump.Process.Name}...)
+			append(pumpInfo, pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath)...)
 
 		ch <- prometheus.MustNewConstMetric(collector.metricTrailSeq,
 			prometheus.GaugeValue,
 			toFloat64("metricTrailSeq", pump.Process.TrailInput.TrailSeq),
-			[]string{pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath, config.MgrHost, pump.Process.Name}...)
+			append(pumpInfo, pump.Process.TrailInput.TrailName, pump.Process.TrailInput.TrailPath)...)
+
 		// === Trail out (s)
 		for _, trailout := range pump.Process.TrailOutput {
+
 			// -- WRITE
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailIoWriteCount,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailIoWriteCount", trailout.IoWriteCount),
-				[]string{trailout.TrailName, trailout.TrailPath, trailout.Hostname, pump.Process.Name}...)
+				append(pumpInfo, trailout.TrailName, trailout.TrailPath)...)
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailIoWriteByte,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailIoWriteByte", trailout.IoWriteBytes),
-				[]string{trailout.TrailName, trailout.TrailPath, trailout.Hostname, pump.Process.Name}...)
+				append(pumpInfo, trailout.TrailName, trailout.TrailPath)...)
+
 			// -- RBA + SEQ
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailRba,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailRba", trailout.TrailRba),
-				[]string{trailout.TrailName, trailout.TrailPath, trailout.Hostname, pump.Process.Name}...)
+				append(pumpInfo, trailout.TrailName, trailout.TrailPath)...)
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailSeq,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailSeq", trailout.TrailSeq),
-				[]string{trailout.TrailName, trailout.TrailPath, trailout.Hostname, pump.Process.Name}...)
+				append(pumpInfo, trailout.TrailName, trailout.TrailPath)...)
+
 			//========== metricTrailMaxBytes
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailMaxBytes,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailMaxBytes", trailout.TrailMaxBytes),
-				[]string{trailout.TrailName, trailout.TrailPath, trailout.Hostname, pump.Process.Name}...)
-
+				append(pumpInfo, trailout.TrailName, trailout.TrailPath)...)
 		}
 	}
 
@@ -458,56 +484,65 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 
 	log.Debugf("performanceServer")
 	log.Debugf("  - %s", performanceServer.Name)
+	performanceServerInfo := []string{"", "", performanceServer.Process.Name, typeToString(performanceServer.Process.Type)}
+
 	ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 		prometheus.GaugeValue,
 		toFloat64("metricStatus", performanceServer.Process.Status),
-		[]string{config.MgrHost, performanceServer.Process.Name, typeToString(performanceServer.Process.Type), "", ""}...)
+		performanceServerInfo...)
 
 	// ===== REPLICAT   =======
 	log.Debugf("Replicat")
 	for _, replicat := range *listOfReplicat {
 		log.Debugf("  - %s", replicat.Name)
+
+		replicatInfo := []string{
+			replicat.Direction,
+			replicat.BDname,
+			replicat.Process.Name,
+			typeToString(replicat.Process.Type)}
+
 		ch <- prometheus.MustNewConstMetric(collector.metricStatus,
 			prometheus.GaugeValue,
 			toFloat64("", replicat.Process.Status),
-			[]string{
-				config.MgrHost, replicat.Process.Name,
-				typeToString(replicat.Process.Type),
-				replicat.Direction,
-				replicat.BDname}...)
+			replicatInfo...)
 
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationLag,
 			prometheus.GaugeValue,
 			toFloat64("", replicat.Process.PositionEr.LastOperationLag),
-			replicat.Process.Name)
+			replicatInfo...)
+
 		ch <- prometheus.MustNewConstMetric(collector.metricLastOperationTs,
 			prometheus.GaugeValue,
 			toUnixTime(replicat.Process.PositionEr.LastOperationTs),
-			replicat.Process.Name)
+			replicatInfo...)
+
 		ch <- prometheus.MustNewConstMetric(collector.metricLastCheckpointTs,
 			prometheus.GaugeValue,
 			toUnixTime(replicat.Process.PositionEr.LastCheckpointTs),
-			replicat.Process.Name)
+			replicatInfo...)
 
 		for _, trailin := range replicat.Process.TrailInput {
+
 			// -- Read
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailIoReadCount,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailIoReadCount", trailin.IoReadCount),
-				[]string{trailin.TrailName, trailin.TrailPath, config.MgrHost, replicat.Process.Name}...)
+				append(replicatInfo, trailin.TrailName, trailin.TrailPath)...)
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailIoReadByte,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailIoReadByte", trailin.IoReadBytes),
-				[]string{trailin.TrailName, trailin.TrailPath, config.MgrHost, replicat.Process.Name}...)
+				append(replicatInfo, trailin.TrailName, trailin.TrailPath)...)
+
 			// -- RBA + SEQ
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailRba,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailRba", trailin.TrailRba),
-				[]string{trailin.TrailName, trailin.TrailPath, config.MgrHost, replicat.Process.Name}...)
+				append(replicatInfo, trailin.TrailName, trailin.TrailPath)...)
 			ch <- prometheus.MustNewConstMetric(collector.metricTrailSeq,
 				prometheus.GaugeValue,
 				toFloat64("metricTrailSeq", trailin.TrailSeq),
-				[]string{trailin.TrailName, trailin.TrailPath, config.MgrHost, replicat.Process.Name}...)
+				append(replicatInfo, trailin.TrailName, trailin.TrailPath)...)
 		}
 		// Dem so luong field trong Statistics sau do chuyen thanh Lable
 		a := reflect.ValueOf(&replicat.Process.StatisticsReplicat).Elem()
@@ -516,7 +551,7 @@ func GetMetrics(ch chan<- prometheus.Metric, collector *GoldenGateCollector,
 				ch <- prometheus.MustNewConstMetric(collector.metricStatistics,
 					prometheus.GaugeValue,
 					toFloat64("StatisticsReplicat."+a.Type().Field(i).Name, fmt.Sprintf("%s", a.Field(i).Interface())),
-					[]string{config.MgrHost, replicat.Process.Name, a.Type().Field(i).Name}...)
+					append(replicatInfo, replicat.Process.Name, a.Type().Field(i).Name)...)
 			}
 		}
 	}
@@ -570,8 +605,8 @@ func toUnixTime(input string) float64 {
 func getDirAndDBName(inputString string) (string, string) {
 	i := strings.Index(inputString, "+")
 	if i > -1 {
-		dir := strings.Trim(inputString[:i], "\"")
-		dbname := strings.Trim(inputString[i+1:], "\"")
+		dir := strings.TrimSpace(strings.Trim(inputString[:i], "\""))
+		dbname := strings.TrimSpace(strings.Trim(inputString[i+1:], "\""))
 		return dir, dbname
 	} else {
 		return "", ""

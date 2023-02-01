@@ -7,7 +7,6 @@ var RootURL = "http://gg-svmgr.io"
 // Struct dùng để chứa cấu hình cho GGexporter.
 type Config struct {
 	Bind    string
-	MgrHost string
 	MgrPort string
 	RootURL string
 }
